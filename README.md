@@ -1,28 +1,20 @@
+
+
 # 🌐 METROPURE - Analyse de la Pollution dans les Stations de Métro d'Île-de-France
 
-Projet de data-science et de modélisation de graphe visant à analyser la pollution dans les stations du métro parisien.  
-Il combine :
-
-- Nettoyage de données (script R)
-- Clustering (K-Means)
-- Classification (K-NN enrichi)
-- Modélisation & analyse de graphes (NetworkX)
-- Analyse spectrale
-- Visualisations
-- Interface web interactive via Streamlit
-
----
+Projet de data-science et de modélisation de graphe visant à analyser la pollution dans les stations du métro parisien.
 
 ## Sommaire
 
-1. Prérequis
-2. Installation
-3. Lancer l’application
-4. Scripts & fonctionnalités
-5. Visualisations QGIS
-6. Contact
+- Description du Projet  
+- Prérequis  
+- Installation  
+- Lancer l'application  
+- Scripts & fonctionnalités  
+- Visualisations  
+- Interface Web (Streamlit)
 
----
+
 
 ## Prérequis
 
