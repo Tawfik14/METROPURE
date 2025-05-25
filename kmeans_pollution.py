@@ -44,7 +44,7 @@ couleurs_pollution = {
     "pollution élevée":  "#D11A8B"    
 }
 
-# Forme des groupes
+# Formes des groupes
 marker_cycle = itertools.cycle(["o", "s", "P", "D", "^", "v", "<", ">", "X"])
 marker_par_groupe = {}   # on mémorise la forme attribuée à chaque groupe
 
