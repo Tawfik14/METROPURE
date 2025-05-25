@@ -1,5 +1,4 @@
-
-#🌐 METROPURE - Analyse de la Pollution dans les Stations de Métro d'Île-de-France
+# 🌐 METROPURE - Analyse de la Pollution dans les Stations de Métro d'Île-de-France
 
 Projet de data-science et de modélisation de graphe visant à analyser la pollution dans les stations du métro parisien.  
 Il combine :
