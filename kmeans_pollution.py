@@ -62,10 +62,10 @@ for gid in sorted(df_clean["groupe"].unique()):
         linewidth=0.5
     )
 
-# Légende pour les formes
+
 ax = plt.gca()
 
-# 1) Légende groupes (formes, fond blanc)
+# Légende pour les groupes
 handles_groupes = [
     Line2D([0], [0], marker=marker_par_groupe[gid],
            markerfacecolor="white", markeredgecolor="k",
