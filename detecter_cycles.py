@@ -13,11 +13,11 @@ for _, row in df.iterrows():
 try:
     cycles = list(nx.cycle_basis(G))  
     if cycles:
-        print(f"\n✅ Cycles détectés : {len(cycles)}")
+        print(f"\n Cycles détectés : {len(cycles)}")
         for i, cycle in enumerate(cycles[:5]):
             print(f"Cycle {i+1} : {' → '.join(cycle)}")
     else:
-        print("\n❌ Aucun cycle détecté dans le graphe.")
+        print("\n Aucun cycle détecté dans le graphe.")
 except Exception as e:
     print("Erreur :", e)
 
