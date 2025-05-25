@@ -16,7 +16,7 @@ for _, row in df.iterrows():
 
 L = nx.laplacian_matrix(G).todense()
 
-print("✅ Matrice de Laplace générée avec succès !")
+print(" Matrice de Laplace générée avec succès !")
 print(f"Taille : {L.shape}")
 
 
