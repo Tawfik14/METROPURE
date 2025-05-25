@@ -8,7 +8,7 @@ import os
 st.set_page_config(page_title="Analyse Pollution - Métro IDF", layout="wide")
 st.title("Analyse de la pollution dans les stations de métro d'Île-de-France")
 
-# 1. Chargement des données ---------------------------------------------------
+#  Chargement des données du fichier
 uploaded_file = st.file_uploader(
     "Uploader le fichier CSV brut (avec point-virgule comme séparateur)",
     type=["csv"],
@@ -24,7 +24,7 @@ if uploaded_file:
         "'qualite-de-lair-dans-le-reseau-de-transport-francilien.csv'"
     )
 
-    # 2. Nettoyage et filtrage via le script R ---------------------------------
+    #  Nettoyage et filtrage avec le script R 
     st.subheader("Nettoyage et filtrage (script R)")
     if st.button("Lancer le script R (metro.R)"):
         result = subprocess.run(["Rscript", "metro.R"], capture_output=True, text=True)
@@ -35,7 +35,7 @@ if uploaded_file:
             st.error("Erreur dans le script R :")
             st.text(result.stderr)
 
-    # 3. Clustering KMeans -----------------------------------------------------
+    #  Clustering kmeans
     st.subheader("Clustering KMeans (script Python)")
     if st.button("Lancer le clustering KMeans"):
         result = subprocess.run(
@@ -55,7 +55,7 @@ if uploaded_file:
             st.error("Erreur dans le script Python :")
             st.text(result.stderr)
 
-    # 4. Classification KNN ----------------------------------------------------
+    # Pour la classification knn
     st.subheader("Classification KNN (script Python)")
     if st.button("Lancer la classification KNN"):
         result = subprocess.run(
@@ -76,7 +76,7 @@ if uploaded_file:
             st.error("Erreur dans le script Python :")
             st.text(result.stderr)
 
-    # 5. Carte QGIS ------------------------------------------------------------
+    #  Carte QGIS 
     st.subheader("Carte QGIS – Visualisation géographique de la pollution")
 
     if os.path.exists("Pollution_IDF.png"):
@@ -99,7 +99,7 @@ if uploaded_file:
     else:
         st.warning("Le fichier 'Pollution_IDF.pdf' n'a pas été trouvé.")
 
-    # 6. Génération du graphe métro -------------------------------------------
+    # Pour générer le graphe métro 
     st.subheader("Graphe des connexions entre stations (Partie 2)")
     if st.button("Générer le fichier de graphe métro"):
         result = subprocess.run(
@@ -112,7 +112,7 @@ if uploaded_file:
             st.error("Erreur lors de la génération du graphe :")
             st.text(result.stderr)
 
-    # 7. Chemin optimal (pollution + temps) -----------------------------------
+    # Chemin optimal, pollution et temps 
     st.subheader("Chemin optimal (pollution minimale sous contrainte de temps)")
     station_depart = st.text_input("Station de départ")
     station_arrivee = st.text_input("Station d'arrivée")
@@ -135,7 +135,7 @@ if uploaded_file:
             st.error("Erreur lors du calcul du chemin :")
             st.text(result.stderr)
 
-    # 8. Chemin sous un seuil de pollution ------------------------------------
+    #  Chemin sous un seuil de pollution 
     st.subheader("Chemin respectant un seuil de pollution maximal")
     station_depart_seuil = st.text_input(
         "Station de départ (seuil)", key="dep_seuil"
@@ -166,7 +166,7 @@ if uploaded_file:
             st.error("Erreur lors de l'exécution du script :")
             st.text(result.stderr)
 
-    # 9. Détection de cycles ---------------------------------------------------
+    #  Détection de cycles 
     st.subheader("Détection de cycles dans le graphe des stations")
     if st.button("Détecter les cycles"):
         result = subprocess.run(
@@ -179,7 +179,7 @@ if uploaded_file:
             st.error("Erreur lors de la détection des cycles :")
             st.text(result.stderr)
 
-    # 10. Analyse spectrale (Partie 3) ----------------------------------------
+    #  L'analyse spectrale  
     st.subheader("Analyse spectrale de la pollution sur le graphe (Partie 3)")
     if st.button("Lancer l'analyse spectrale"):
         result = subprocess.run(
@@ -200,7 +200,7 @@ if uploaded_file:
             st.error("Erreur lors de l'analyse spectrale :")
             st.text(result.stderr)
 
-    # 11. Pollution par station sur le graphe --------------------------------
+    #  Pollution par station sur le graphe 
     st.subheader("Pollution par station sur le graphe")
     if st.button("Afficher pollution sur graphe"):
         result = subprocess.run(
@@ -227,7 +227,7 @@ if uploaded_file:
             st.error("Erreur lors de la visualisation :")
             st.text(result.stderr)
 
-    # 12. Affichage du graphe --------------------------------------------------
+    #  Affichage du graphe 
     if st.button("Afficher le graphe des stations"):
         result = subprocess.run(
             ["python3", "afficher_graphe.py"], capture_output=True, text=True
