@@ -7,9 +7,9 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
 
-# ------------------------------------------------------------------
-# 1. Lecture et préparation des données
-# ------------------------------------------------------------------
+
+# Préparation des données
+
 df = pd.read_csv("stations_metro_propre.csv")
 
 df_clean = df[["Nom de la Station", "stop_lat", "stop_lon", "niveau_pollution"]].copy()
@@ -22,9 +22,9 @@ df_clean["pollution_score"] = df_clean["niveau_pollution"].map(encodage)
 df_clean = df_clean.dropna(subset=["stop_lat", "stop_lon", "pollution_score"])
 
 
-# ------------------------------------------------------------------
-# 2. K-means → groupes
-# ------------------------------------------------------------------
+
+# On va faire les groupes
+
 features = df_clean[["stop_lat", "stop_lon", "pollution_score"]]
 X_scaled = StandardScaler().fit_transform(features)
 
@@ -32,19 +32,19 @@ kmeans = KMeans(n_clusters=3, random_state=42)
 df_clean["groupe"] = kmeans.fit_predict(X_scaled)
 
 
-# ------------------------------------------------------------------
-# 3. Visualisation
-# ------------------------------------------------------------------
+
+# 3. Visualisation 
+
 plt.figure(figsize=(10, 6))
 
-# --- palette pollution (bleu → violet → rose) ---
+# Couleurs
 couleurs_pollution = {
-    "pollution faible":  "#4A90E2",   # bleu
-    "pollution moyenne": "#8B5CF6",   # violet
-    "pollution élevée":  "#D11A8B"    # magenta-rose
+    "pollution faible":  "#4A90E2",   
+    "pollution moyenne": "#8B5CF6",   
+    "pollution élevée":  "#D11A8B"    
 }
 
-# --- formes pour les groupes ---
+# Forme des groupes
 marker_cycle = itertools.cycle(["o", "s", "P", "D", "^", "v", "<", ">", "X"])
 marker_par_groupe = {}   # on mémorise la forme attribuée à chaque groupe
 
@@ -62,7 +62,7 @@ for gid in sorted(df_clean["groupe"].unique()):
         linewidth=0.5
     )
 
-# ---------- 2 légendes ----------
+# Légende pour les formes
 ax = plt.gca()
 
 # 1) Légende groupes (formes, fond blanc)
@@ -75,13 +75,13 @@ handles_groupes = [
 leg_groupes = ax.legend(handles=handles_groupes, title="Groupes", loc="upper right")
 ax.add_artist(leg_groupes)
 
-# 2) Légende pollution (couleurs)
+# Légende pour les couleurs
 handles_pollution = [
     mpatches.Patch(color=col, label=lib.replace("pollution ", "").capitalize())
     for lib, col in couleurs_pollution.items()
 ]
 plt.legend(handles=handles_pollution, title="Niveau pollution", loc="lower left")
-# ---------------------------------
+
 
 plt.title("Stations de métro : groupes & niveau de pollution")
 plt.xlabel("Longitude")
