@@ -62,8 +62,8 @@ Les étapes principales du projet incluent :
 ### 1. Récupérer le projet
 ```bash
  Clone le dépôt puis entre dans le dossier :
-git clone https://github.com/<TON_GITHUB>/<TON_REPO>.git
-cd <TON_REPO>
+git clone https://github.com/Tawfik14/METROPURE.git
+cd METROPURE
 
 ### 2. Installation paquets python
   ```bash
