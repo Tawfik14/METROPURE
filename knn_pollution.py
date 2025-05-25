@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-knn_pollution.py – v2.2
-• Variables d’entrée : lat, lon + indicateurs open‑data (incertitude, aérien, surveillance, ligne).
-• Pipeline : StandardScaler → SMOTE → K‑NN (GridSearchCV).
-• Affichage final : rapport de classification et matrice de confusion fusionnés côte à côte.
-"""
-
 import warnings; warnings.filterwarnings("ignore")
 
 import pandas as pd
@@ -19,9 +10,9 @@ from sklearn.metrics import classification_report, confusion_matrix
 from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import Pipeline
 
-# ----------------------------------------------------------------------
-# 0. Fonctions utilitaires
-# ----------------------------------------------------------------------
+
+#  Fonctions
+
 
 def find_col(df: pd.DataFrame, needle: str) -> str:
     """Retourne le 1er nom de colonne contenant ‹ needle › (casse ignorée)."""
@@ -37,9 +28,9 @@ def clean_name(s: str) -> str:
         return ""
     return " ".join(s.strip().upper().split())
 
-# ----------------------------------------------------------------------
-# 1. Chargements
-# ----------------------------------------------------------------------
+
+# On va charger les deux fichiers
+
 CSV_BASE = "stations_metro_propre.csv"
 CSV_AIR = "qualite-de-lair-dans-le-reseau-de-transport-francilien.csv"
 classes = ["pollution faible", "pollution moyenne", "pollution élevée"]
@@ -47,9 +38,9 @@ classes = ["pollution faible", "pollution moyenne", "pollution élevée"]
 df_base = pd.read_csv(CSV_BASE)
 df_air = pd.read_csv(CSV_AIR, sep=";")
 
-# ----------------------------------------------------------------------
-# 2. Détection et renommage souple des colonnes clés
-# ----------------------------------------------------------------------
+
+#  Détection et renommage des colonnes importantes
+
 col_station_air = find_col(df_air, "station")
 col_ligne_air = find_col(df_air, "ligne")
 
@@ -58,26 +49,25 @@ df_air = df_air.rename(columns={
     col_ligne_air: "Nom ligne air"
 })
 
-# ----------------------------------------------------------------------
-# 3. Enrichissement du CSV air
-# ----------------------------------------------------------------------
-# On garde uniquement le réseau métro
+
+#  Enrichissement du CSV air
+
 
 df_air = df_air[df_air["Nom ligne air"].str.contains("métro", case=False, na=False)]
 
-# Indicateurs binaires
+
 
 df_air["incertitude_forte"] = df_air["Incertitude"].str.contains("forte", case=False, na=False).astype(int)
 df_air["station_aerienne"] = df_air["Incertitude"].str.contains("aérienne", case=False, na=False).astype(int)
 df_air["surveillance"] = df_air["Recommandation de surveillance"].notna().astype(int)
 
-# One‑hot des lignes de métro
+
 
 df_air = pd.get_dummies(df_air, columns=["Nom ligne air"], prefix="ligne", drop_first=True)
 
-# ----------------------------------------------------------------------
-# 4. Fusion avec le référentiel positions
-# ----------------------------------------------------------------------
+
+
+
 
 df_base["Nom clean"] = df_base["Nom de la Station"].apply(clean_name)
 df_air["Nom clean"] = df_air["Nom station air"].apply(clean_name)
@@ -98,24 +88,24 @@ df[feature_cols_extra] = df[feature_cols_extra].fillna(0)
 
 df = df[df["niveau_pollution"].isin(classes)].copy()
 
-# ----------------------------------------------------------------------
-# 5. Préparation X / y
-# ----------------------------------------------------------------------
+
+#  Préparation de x et y
+
 
 X = df[["stop_lat", "stop_lon"] + feature_cols_extra].values
 y = df["niveau_pollution"].values
 
-# ----------------------------------------------------------------------
-# 6. Train / test split
-# ----------------------------------------------------------------------
+
+#  Train / test, séparation
+
 
 X_tr, X_te, y_tr, y_te = train_test_split(
     X, y, test_size=0.30, stratify=y, random_state=42
 )
 
-# ----------------------------------------------------------------------
-# 7. Pipeline + GridSearchCV
-# ----------------------------------------------------------------------
+
+#  Pipeline et GridSearchCV
+
 
 pipe = Pipeline([
     ("scaler", StandardScaler()),
@@ -139,9 +129,9 @@ print("F1_macro (cross‑val)      :", round(gs.best_score_, 3))
 best = gs.best_estimator_
 y_pred = best.predict(X_te)
 
-# ----------------------------------------------------------------------
-# 8. Rapport + matrice fusionnés
-# ----------------------------------------------------------------------
+
+#  Rapport et la matrice
+
 
 report_df = (
     pd.DataFrame(classification_report(y_te, y_pred, target_names=classes, output_dict=True))
@@ -161,9 +151,9 @@ resultats = pd.concat([report_df, cm_df], axis=1)
 print("\n===== Rapport + Confusion côte à côte =====")
 print(resultats.to_string())
 
-# ----------------------------------------------------------------------
-# 9. Heatmap (optionnelle)
-# ----------------------------------------------------------------------
+
+#  Le heatmap 
+
 
 plt.figure(figsize=(5, 4))
 plt.imshow(cm, cmap="plasma")
