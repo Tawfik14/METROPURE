@@ -36,10 +36,10 @@ for path in all_paths:
 
 
 if chemin_optimal:
-    print("\n✅ Chemin optimal trouvé :")
+    print("\n Chemin optimal trouvé :")
     print(" → ".join(chemin_optimal))
     print(f"Temps total : {total_temps:.1f} min")
     print(f"Pollution totale : {pollution_min:.2f}")
 else:
-    print("\n❌ Aucun chemin trouvé respectant la contrainte de temps.")
+    print("\n Aucun chemin trouvé respectant la contrainte de temps.")
 
