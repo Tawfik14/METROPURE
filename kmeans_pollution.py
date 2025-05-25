@@ -33,7 +33,7 @@ df_clean["groupe"] = kmeans.fit_predict(X_scaled)
 
 
 
-# 3. Visualisation 
+#  Visualisation 
 
 plt.figure(figsize=(10, 6))
 
