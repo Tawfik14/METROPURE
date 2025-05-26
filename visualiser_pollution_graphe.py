@@ -22,7 +22,7 @@ df_pollution.columns = [col.strip().lower() for col in df_pollution.columns]
 df_pollution["nom de la ligne"] = df_pollution["nom de la ligne"].str.lower()
 df_metro = df_pollution[df_pollution["nom de la ligne"].str.contains("métro", na=False)].copy()
 
-# Mapper le niveau de pollution réel
+# Ici on va mapper
 pollution_map = {
     "pollution faible": 1,
     "pollution moyenne": 3,
@@ -33,28 +33,28 @@ df_metro = df_metro[df_metro["niveau_pollution"].isin(pollution_map)].copy()
 df_metro["pollution_num"] = df_metro["niveau_pollution"].map(pollution_map)
 df_metro["station_norm"] = df_metro["nom de la station"].apply(normalize)
 
-# Moyenne par station
+
 pollution_par_station = df_metro.groupby("station_norm")["pollution_num"].mean().to_dict()
 
-# Création du graphe
+
 G = nx.Graph()
 for _, row in df_graph.iterrows():
     s1 = normalize(row["station1"])
     s2 = normalize(row["station2"])
     G.add_edge(s1, s2)
 
-# Attribution de la pollution réelle aux nœuds
+
 stations = list(G.nodes())
 pollution_station = {station: pollution_par_station.get(station, 0) for station in stations}
 nx.set_node_attributes(G, pollution_station, name="pollution")
 
-# Couleurs des nœuds selon pollution
+
 node_colors = [G.nodes[n]["pollution"] for n in G.nodes()]
 
-# Position des nœuds
+
 pos = nx.spring_layout(G, seed=42)
 
-# Visualisation
+
 plt.figure(figsize=(15, 12))
 nx.draw_networkx_edges(G, pos, alpha=0.3)
 nodes = nx.draw_networkx_nodes(
