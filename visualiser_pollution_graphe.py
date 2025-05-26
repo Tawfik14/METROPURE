@@ -54,7 +54,7 @@ node_colors = [G.nodes[n]["pollution"] for n in G.nodes()]
 
 pos = nx.spring_layout(G, seed=42)
 
-
+# Affichage
 plt.figure(figsize=(15, 12))
 nx.draw_networkx_edges(G, pos, alpha=0.3)
 nodes = nx.draw_networkx_nodes(
