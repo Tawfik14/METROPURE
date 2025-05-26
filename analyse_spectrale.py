@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import scipy.linalg as la
 import unicodedata
 
-# === 1. FONCTION DE NETTOYAGE ===
+# Fonction de nettoyage
 def normalize(text):
     if pd.isna(text):
         return ""
@@ -14,7 +14,7 @@ def normalize(text):
     text = "".join(c for c in text if unicodedata.category(c) != "Mn")  # Enlève les accents
     return text.strip()
 
-# === 2. CHARGEMENT DES DONNÉES ===
+# On va charger les données
 df_graph = pd.read_csv("graphe_metro.csv")
 df_pollution = pd.read_csv("qualite-de-lair-dans-le-reseau-de-transport-francilien.csv", sep=";")
 
@@ -25,7 +25,7 @@ df_pollution["nom de la ligne"] = df_pollution["nom de la ligne"].str.lower()
 # Filtrage métro uniquement
 df_metro = df_pollution[df_pollution["nom de la ligne"].str.contains("métro", na=False)].copy()
 
-# === 3. MAPPING POLLUTION ===
+# On va faire le Mapping
 pollution_map = {
     "pollution faible": 1,
     "pollution moyenne": 3,
@@ -39,14 +39,14 @@ df_metro["station_norm"] = df_metro["nom de la station"].apply(normalize)
 # Moyenne pollution par station
 pollution_par_station = df_metro.groupby("station_norm")["pollution_num"].mean().to_dict()
 
-# === 4. CONSTRUCTION DU GRAPHE ===
+# On va construire le graphe
 G = nx.Graph()
 for _, row in df_graph.iterrows():
     s1 = normalize(row["station1"])
     s2 = normalize(row["station2"])
     G.add_edge(s1, s2, weight=1)
 
-# === 5. SIGNAL SUR GRAPHES ===
+
 stations = list(G.nodes())
 pollution_signal = [pollution_par_station.get(station, np.nan) for station in stations]
 valid_indices = [i for i, val in enumerate(pollution_signal) if not np.isnan(val)]
@@ -54,9 +54,9 @@ stations_valid = [stations[i] for i in valid_indices]
 pollution_signal_valid = np.array([pollution_signal[i] for i in valid_indices])
 G_sub = G.subgraph(stations_valid).copy()
 
-# === 6. ANALYSE SPECTRALE ===
+# On aura l'analyse spectrale
 if G_sub.number_of_nodes() > 0 and G_sub.number_of_edges() > 0:
-    print("✅ Sous-graphe avec pollution valide :")
+    print(" Sous-graphe avec pollution valide :")
     print(f" - {G_sub.number_of_nodes()} stations")
     print(f" - {G_sub.number_of_edges()} connexions\n")
 
@@ -71,7 +71,7 @@ if G_sub.number_of_nodes() > 0 and G_sub.number_of_edges() > 0:
     # Projection spectrale
     spectral_signal = eigvecs.T @ pollution_signal_valid
 
-    # === 7. VISUALISATION ===
+    # Affichage
     plt.figure(figsize=(10, 4))
     plt.plot(spectral_signal**2, marker='o')
     plt.title("Énergie du signal de pollution dans le domaine spectral (réel)")
