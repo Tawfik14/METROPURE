@@ -95,7 +95,7 @@ Dans Streamlit :
 
 ## Scripts & fonctionnalités
 
-- **metro.R** : Nettoie le jeu de données ; supprime NA et doublons, filtre uniquement les stations de métro et génère un CSV propre.  
+- **metro.R** : Nettoie le jeu de données ; supprime NA et doublons, filtre uniquement les stations de métro et génère un CSV propre. application de K-means et K-NN, plus creation d'une carte fixe et une carte intéractive. 
 - **kmeans_pollution.py** : Applique un clustering K-Means (k = 3) sur latitude, longitude et score de pollution ; produit une carte des groupes.  
 - **knn_pollution.py** : Pipeline complet StandardScaler → SMOTE → K-NN avec GridSearchCV ; affiche un rapport de classification et une matrice de confusion.  
 - **generer_graphe_metro.py** : Parcourt les stations par ligne et crée la liste des connexions directes entre stations voisines (`graphe_metro.csv`).  
